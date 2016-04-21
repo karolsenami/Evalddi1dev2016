@@ -57,8 +57,6 @@ public class ProductProvider {
                 e.printStackTrace();
             }
         }
-
-//        Log.i("provide","From Provide there are "+list.get(0).name+list.get(0).favorite+" "+list.get(1).name+list.get(1).favorite+" "+list.get(3).name+list.get(3).favorite);
         Log.i("provide","There was "+list.size()+" items in the cart");
         return list;
     }
@@ -77,15 +75,18 @@ public class ProductProvider {
 
     public static void putProductInCart(Context ctx, Product product){
         ArrayList<Product> list = ProductProvider.provideFromCart(ctx);
+        if(list == null)
+            list = new ArrayList<>();
         list.add(product);
+
         ProductProvider.saveToMemory(ctx,list);
     }
 
 
-    public static void removeProductFromCart(Context ctx, Product p){
+    public static void removeProductFromCart(Context ctx, String productName){
         ArrayList<Product> list = ProductProvider.provideFromCart(ctx);
         for (int i = 0; i < list.size(); i++) {
-            if(list.get(i).getName().equals(p.getName())) {
+            if(list.get(i).getName().equals(productName)) {
                 list.remove(i);
                 break;
             }
