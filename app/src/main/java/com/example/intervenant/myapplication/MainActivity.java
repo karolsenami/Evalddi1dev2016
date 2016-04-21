@@ -1,5 +1,6 @@
 package com.example.intervenant.myapplication;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.intervenant.myapplication.com.example.intervenant.core.Product;
 import com.example.intervenant.myapplication.com.example.intervenant.core.fragments.MViewFragment;
 
 
@@ -28,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
     }
+
+//               _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
 
     public class MPagerAdapter extends FragmentPagerAdapter {
 
