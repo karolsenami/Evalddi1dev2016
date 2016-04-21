@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <ImageView
+        android:layout_width="172dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/detail_image"
+        android:layout_gravity="center_horizontal"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PRIX"
+        android:id="@+id/price"
+        android:layout_weight="0.06"
+        android:layout_gravity="center_horizontal" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="fav"
+        android:id="@+id/switch1"
+        android:layout_gravity="right"
+        android:checked="false" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+ PANIER"
+        android:id="@+id/cart_button"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.25" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="info"
+        android:id="@+id/info" />
+</LinearLayout>
