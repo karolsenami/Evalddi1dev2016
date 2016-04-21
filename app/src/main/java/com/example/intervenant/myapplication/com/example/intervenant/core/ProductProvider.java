@@ -104,6 +104,16 @@ public class ProductProvider {
         prefsEditor.commit();
     }
 
+    public static double getTotalCartPrice(Context ctx) {
+        ArrayList<Product> list = ProductProvider.provideFromCart(ctx);
+        double price = 0;
+        for (int i = 0; i < list.size(); i++) {
+            Product p = list.get(i);
+            price += Double.valueOf(p.getPrice());
+        }
+        return price;
+    }
+
     public static void cleanCart(Context ctx) {
         ArrayList<Product> list = new ArrayList<>();
         saveToMemory(ctx,list);

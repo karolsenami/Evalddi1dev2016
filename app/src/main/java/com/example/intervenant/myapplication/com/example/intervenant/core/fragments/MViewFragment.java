@@ -2,15 +2,16 @@ package com.example.intervenant.myapplication.com.example.intervenant.core.fragm
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.example.intervenant.myapplication.ProductDetailActivity;
 import com.example.intervenant.myapplication.R;
+import com.example.intervenant.myapplication.CheckoutActivity;
 import com.example.intervenant.myapplication.com.example.intervenant.core.Product;
 import com.example.intervenant.myapplication.com.example.intervenant.core.ProductProvider;
 import com.example.intervenant.myapplication.com.example.intervenant.core.ProductsGridAdapter;
@@ -114,12 +116,31 @@ public class MViewFragment extends Fragment {
             case 1:
                 ArrayList<Product> array = ProductProvider.provideFromCart(getContext());
                 listAdapter.update(array);
+                this.setHasOptionsMenu(true);
                 break;
 
         }
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.cart_options, menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.pay_option:
+                Intent checkoutIntent = new Intent(getContext(), CheckoutActivity.class);
+                checkoutIntent.putExtra("totalPrice", ProductProvider.getTotalCartPrice(getContext()));
+                startActivity(checkoutIntent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
