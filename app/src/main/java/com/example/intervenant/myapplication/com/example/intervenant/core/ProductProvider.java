@@ -1,6 +1,5 @@
 package com.example.intervenant.myapplication.com.example.intervenant.core;
 
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -12,7 +11,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.intervenant.myapplication.ProductDetailActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -45,10 +43,10 @@ public class ProductProvider {
         mRequestQueue.add(jsObjRequest);
     }
 
-    public static  ArrayList<Product> provideFromFavorite(Context ctx){
+    public static  ArrayList<Product> provideFromCart(Context ctx){
         SharedPreferences data = ctx.getSharedPreferences("data", 0);
         ArrayList<Product> list = new ArrayList<>();
-        String strJson = data.getString("favoritesProducts","[]");//second parameter is necessary ie.,Value to return if this preference does not exist.
+        String strJson = data.getString("cartProducts","[]");//second parameter is necessary ie.,Value to return if this preference does not exist.
         if(strJson != null) {
             try {
                 JSONArray jsonData = new JSONArray(strJson);
@@ -61,40 +59,31 @@ public class ProductProvider {
         }
 
 //        Log.i("provide","From Provide there are "+list.get(0).name+list.get(0).favorite+" "+list.get(1).name+list.get(1).favorite+" "+list.get(3).name+list.get(3).favorite);
-        Log.i("provide","From Provide there are "+list.size());
+        Log.i("provide","There was "+list.size()+" items in the cart");
         return list;
     }
 
-    public static boolean isInFavorite(Context ctx, String name) {
+    public static int countInCart(Context ctx, String name) {
         ArrayList<Product> list;
-        list = ProductProvider.provideFromFavorite(ctx);
-        int i;
-        for (i = 0; i < list.size(); i++) {
+        list = ProductProvider.provideFromCart(ctx);
+        int count = 0;
+        for (int i = 0; i < list.size(); i++) {
             if(list.get(i).getName().equals(name)) {
-                Log.i("isInFav","equals");
-                break;
+                count ++;
             }
         }
-        return i != list.size();
+        return count;
     }
 
-    public static void putProductInFavorite(Context ctx, Product produit){
-        ArrayList<Product> list = ProductProvider.provideFromFavorite(ctx);
-        Log.i("add","before"+list.size());
-//        if(!ProductProvider.isInFavorite(ctx, f)){
-        list.add(produit);
-/*        } else {
-            Log.i("add","was already !");
-        }
-*/
-        Log.i("add","after"+list.size());
+    public static void putProductInCart(Context ctx, Product product){
+        ArrayList<Product> list = ProductProvider.provideFromCart(ctx);
+        list.add(product);
         ProductProvider.saveToMemory(ctx,list);
     }
 
 
-    public static void removeProductFromFavorite(Context ctx, Product p){
-        ArrayList<Product> list = ProductProvider.provideFromFavorite(ctx);
-        Log.i("remove","before"+list.size());
+    public static void removeProductFromCart(Context ctx, Product p){
+        ArrayList<Product> list = ProductProvider.provideFromCart(ctx);
         for (int i = 0; i < list.size(); i++) {
             if(list.get(i).getName().equals(p.getName())) {
                 list.remove(i);
@@ -106,17 +95,15 @@ public class ProductProvider {
     }
 
     public static void saveToMemory(Context ctx, ArrayList<Product> list) {
-        Log.i("save","saving1");
-
         SharedPreferences data = ctx.getSharedPreferences("data",0);
         SharedPreferences.Editor prefsEditor = data.edit();
         Gson gson = new Gson();
         String json = gson.toJson(list);
-        prefsEditor.putString("favoritesProducts", json);
+        prefsEditor.putString("cartProducts", json);
         prefsEditor.commit();
     }
 
-    public static void cleanFavorite(Context ctx) {
+    public static void cleanCart(Context ctx) {
         ArrayList<Product> list = new ArrayList<>();
         saveToMemory(ctx,list);
     }
