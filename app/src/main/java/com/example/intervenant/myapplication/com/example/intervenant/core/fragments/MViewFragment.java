@@ -58,7 +58,7 @@ public class MViewFragment extends Fragment {
 
     ProductsListAdapter listAdapter;
     ProductsGridAdapter gridAdapter;
-
+    ProductsListAdapter allListAdapter;
     private OnFragmentInteractionListener mListener;
 
     public MViewFragment() {}
@@ -82,6 +82,7 @@ public class MViewFragment extends Fragment {
                     //gridView
                     products = new ArrayList<>();
                     gridAdapter = new ProductsGridAdapter(products);
+                    allListAdapter = new ProductsListAdapter(products);
                     break;
                 case 1:
                     //gridView
@@ -109,23 +110,30 @@ public class MViewFragment extends Fragment {
 
                         ArrayList<Product> array = gson.fromJson(json.toString(), listType);
                         gridAdapter.update(array);
+                        allListAdapter.update(array);
                     }
                 });
                 break;
-
             case 1:
                 ArrayList<Product> array = ProductProvider.provideFromCart(getContext());
                 listAdapter.update(array);
-                this.setHasOptionsMenu(true);
                 break;
-
         }
+        this.setHasOptionsMenu(true);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.cart_options, menu);
+        switch (type) {
+            case 0:
+                inflater.inflate(R.menu.affichage_options, menu);
+                break;
+            case 1:
+                inflater.inflate(R.menu.cart_options, menu);
+                break;
+        }
+
     }
 
     @Override
@@ -136,6 +144,19 @@ public class MViewFragment extends Fragment {
                 Intent checkoutIntent = new Intent(getContext(), CheckoutActivity.class);
                 checkoutIntent.putExtra("totalPrice", ProductProvider.getTotalCartPrice(getContext()));
                 startActivity(checkoutIntent);
+                return true;
+            case R.id.affichage_option:
+                if (item.getTitle().equals("List")) {
+
+                    Log.i("onOptions","grid"+item.getTitle());
+                    gridView.setAdapter(listAdapter);
+                    item.setTitle("Grid");
+                } else {
+                    gridView.setAdapter(allListAdapter);
+                    Log.i("onOptions","list");
+                    item.setTitle("List");
+                }
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
